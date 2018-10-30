@@ -1,10 +1,7 @@
 import numpy as np
-X = np.random.rand(10,100)
-y = (np.random.rand(10,4)*24+1).astype(int)
-e = np.arange(100)
 
-from generator import MyGenerator
+X = np.loadtxt('words.txt', dtype='str', delimiter=' - ')
 
-g = MyGenerator(e, X,y,4,5,0,0.1,3)
-
-g.get_variant1(0)
+mask = np.concatenate([np.random.choice(len(X), 16, replace=False) for i in range(int(26*3/16))])
+print(len(mask))
+print(X[mask])

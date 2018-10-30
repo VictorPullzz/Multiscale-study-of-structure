@@ -51,7 +51,7 @@ def view_pred(X, y):
     plt.show()
     return y_pred
 
-X_train_real, X_test_real, y_train_real, y_test_real = loadreal('fdm_array_new.txt', 'cns_array_new.txt')
+X_train_real, X_test_real, y_train_real, y_test_real = loadreal('data/fdm_array_new.txt', 'data/cns_array_new.txt')
 
 model = Sequential()
 model.add(Reshape((94, 1), input_shape=(94,)))
@@ -62,21 +62,22 @@ model.add(MaxPooling1D(2))
 model.add(Conv1D(64, 3, init='he_uniform', padding='same', activation='relu'))
 model.add(MaxPooling1D(2))
 model.add(Flatten())
-#model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(4,  activation='sigmoid'))
-
 
 model.compile(loss=weighted_mse, optimizer='adam')
 model.summary()
 
-X, y, E = get_Xy('pos/out*conv.txt')
+model_backup_name = 'model1.hd5'
 
-if (False):
+X, y, E = get_Xy('data/positions/out*conv.txt')
+
+if (True):
     model.fit_generator(MyGenerator(E,X,y,3,10,1,0.05,256, mode='variant1'),steps_per_epoch=200,epochs=200,
               #validation_data=(np.append(np.zeros((len(X_real), 2)), X_real, axis=-1)[...,None], y_real))
-              callbacks=[MCP('model1.hd5', save_best_only=True),ES(patience=15, verbose=True), TB()],
+              callbacks=[MCP(model_backup_name, save_best_only=True),ES(patience=15, verbose=True), TB()],
               validation_data=MyGenerator(E,X,y,3,10,1,0.05,256, mode='variant1'))
-model.load_weights('model1.hd5')
+model.load_weights(model_backup_name)
 
 X_val, y_val = MyGenerator(E,X,y,3,10,1,0.05,256, mode='variant1').__getitem__(0)
 y_pred = view_pred(X_val, y_val)
