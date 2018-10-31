@@ -1,6 +1,6 @@
 import numpy as np
 import keras
-from utils import deformate
+from lib.utils import deformate
 
 class MyGenerator(keras.utils.Sequence):
     def __init__(self, E, X, y, Nmin, Nmax, dE, dA, batch_size=32, mode='random'):
@@ -68,6 +68,26 @@ class MyGenerator(keras.utils.Sequence):
         pass
 
 class DataAugmentator(keras.utils.Sequence):
-    def __init__(self, X, y):
+    def __init__(self, X, y, balanced=True, batch_size=32):
         self.X = X
         self.y = y
+        self.batch_size = batch_size
+        if (not balanced):
+            self.p = None
+            return
+        freq, bins = np.histogram(y[:,0])
+        coef = freq.max() / freq
+        p = coef[np.argmax([y[:,0] < b for b in bins], axis=0) - 1]
+        p /= p.sum()
+        self.p = p
+
+    def __len__(self):
+        return 1
+
+    def __getitem__(self, ind):
+        mask = np.random.choice(len(self.X), self.batch_size, replace=True, p=self.p)
+        result_X = self.X[mask]
+        result_y = self.y[mask]
+        result_X /= np.max(result_X, axis=-1)[:, None]
+        result_X = result_X[:,1:] - result_X[:,:-1]
+        return result_X, result_y / np.array([12,6,24,12])
