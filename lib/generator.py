@@ -66,3 +66,8 @@ class MyGenerator(keras.utils.Sequence):
 
     def on_epoch_end(self):
         pass
+
+class DataAugmentator(keras.utils.Sequence):
+    def __init__(self, X, y):
+        self.X = X
+        self.y = y
