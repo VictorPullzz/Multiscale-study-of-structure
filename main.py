@@ -11,7 +11,7 @@ from tensorflow import set_random_seed
 from generator import MyGenerator
 import os
 import re
-from glob import glob
+from lib.utils import get_Xy
 np.random.seed(42)
 set_random_seed(42)
 
@@ -26,21 +26,6 @@ def loadreal(spectra, cns):
     #y_real = y_real / np.array([12,6,24,12])
     X_train_real, X_test_real, y_train_real, y_test_real = train_test_split(X_real, y_real, test_size=0.33, random_state=42)
     return X_train_real, X_test_real, y_train_real, y_test_real
-
-def get_Xy(pos_spectra):
-    files = glob(pos_spectra)
-    X = []
-    y = []
-    pattern = re.compile(r'\d+')
-    for file in files:
-        data = np.loadtxt(file, skiprows=2)
-        X.append(data[:,1])
-        cns = np.asarray(pattern.findall(file), dtype=int)
-        y.append(cns)
-    E = data[:,0]
-    X = np.asarray(X)
-    y = np.asarray(y)
-    return X, y, E
 
 def view_pred(X, y):
     y_pred = model.predict_on_batch(X)
