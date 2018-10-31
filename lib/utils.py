@@ -1,5 +1,8 @@
 # Here we will add all experimental functions we use
 # Some of them we may move to other files, if necessary
+import re
+import numpy as np
+
 from glob import glob
 
 def get_Xy(pos_spectra):
@@ -16,3 +19,7 @@ def get_Xy(pos_spectra):
     X = np.asarray(X)
     y = np.asarray(y)
     return X, y, E
+
+def deformate(energy, XANES, alpha, shift):
+    new_energy = energy * (1 + alpha) + shift
+    return np.interp(new_energy, energy, XANES)

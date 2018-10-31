@@ -1,9 +1,6 @@
 import numpy as np
 import keras
-
-def deformate(energy, XANES, alpha, shift):
-    new_energy = energy * (1 + alpha) + shift
-    return np.interp(new_energy, energy, XANES)
+from utils import deformate
 
 class MyGenerator(keras.utils.Sequence):
     def __init__(self, E, X, y, Nmin, Nmax, dE, dA, batch_size=32, mode='random'):

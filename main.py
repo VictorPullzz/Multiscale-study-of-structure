@@ -10,7 +10,6 @@ from keras import regularizers
 from tensorflow import set_random_seed
 from generator import MyGenerator
 import os
-import re
 from lib.utils import get_Xy
 np.random.seed(42)
 set_random_seed(42)
