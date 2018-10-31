@@ -8,9 +8,10 @@ from keras.layers.core import Dropout
 from keras.callbacks import TensorBoard as TB, ModelCheckpoint as MCP, EarlyStopping as ES
 from keras import regularizers
 from tensorflow import set_random_seed
-from generator import MyGenerator
 import os
 from lib.utils import get_Xy
+from lib.generator import MyGenerator
+
 np.random.seed(42)
 set_random_seed(42)
 
