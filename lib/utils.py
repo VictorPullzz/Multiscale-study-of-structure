@@ -23,3 +23,14 @@ def get_Xy(pos_spectra):
 def deformate(energy, XANES, alpha, shift):
     new_energy = energy * (1 + alpha) + shift
     return np.interp(new_energy, energy, XANES)
+
+def extract_pos_of_cluster(clustfile):
+    pattern = re.compile('[0-9_]+')
+    with open(clustfile, 'r') as cl:
+        cluster_positions = {}
+        for line in cl:
+            if pattern.match(line):
+                pos = pattern.findall(line)
+                if (len(pos) == 2):
+                    cluster_positions[pos[0]] = int(pos[1])
+    return cluster_positions
