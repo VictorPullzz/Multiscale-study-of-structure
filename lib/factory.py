@@ -27,7 +27,7 @@ class ClustersFactory():
         return lc
 
     def get_unique_pos(self, atoms):
-    """Returns CNs as np.array, list of indices of atoms for every position
+        """Returns CNs as np.array, list of indices of atoms for every position
         and list with counts of the positions"""
         lc_2 = self.lc / 2 ** 0.5
         nls = [NeigbourListFactory(R, atoms) for R in [lc_2, self.lc, lc_2 * 3 ** 0.5, lc_2 * 2]]
@@ -61,40 +61,40 @@ class ClustersFactory():
         atoms.set_positions(atoms.get_positions() - z)
         return atoms
 
-    def generate_clusters(self, folder, max_size=200):
-        """Generating clusters with ASE library and writing .xyz files
-        of clusters coordinates"""
-        num = 0
-        for i in range(-lim_of_range, lim_of_range):
-            for j in range(-lim_of_range, lim_of_range):
-                for k in range(-lim_of_range, lim_of_range):
-                    layers = [i, j, k]
-                    if self.latticetype == 'fcc':
-                        atoms = FaceCenteredCubic(atomtype, surfaces, layers,
-                        latticeconstant=self.lc)
-                    if len(atoms) > max_size:
-                        continue
-                    atoms = Atoms(atoms)
-                    cluster_name = str(len(atoms)) + '_' + str(num) + '.xyz'
-                    if os.path.exists('data'+ folder + '/clusters_coordinates/' + cluster_name):
-                        continue
-                    else:
-                        write('/data/' + folder + '/clusters_coordinates/' + cluster_name, atoms)
-                    nl = neighborlist_factory(self.lc*2**0.5, atoms)
-                    for CN, u_ind, count in zip(*get_unique_pos(atoms, self.lc)):
-                        change_zero(atoms, atoms.get_positions()[u_ind])
-                        position_name = _'.join(map(str, CN)) + '.xyz'
-                        #Bad code below
-                        if os.path.exists('/data/' + folder + '/positions_coordinates/' + position_name):
-                            continue
-                        else:
-                            write('/data/' + folder + '/positions_coordinates/' + position_name +
-                            atoms[np.append([u_ind], nl.get_neighbors(u_ind)[0])])
-                            f = open('/data/' + folder + '/positions_count/' + cluster_name, 'a')
-                            f.write('_'.join(map(str, CN))+ ' ' + str(count) +'\n') #пишем, из каких неэквивал. позиций состоит кластер и сколько их в кластере
-                            f.close()
-
-                    num += 1
+    # def generate_clusters(self, folder, max_size=200):
+    #     """Generating clusters with ASE library and writing .xyz files
+    #     of clusters coordinates"""
+    #     num = 0
+    #     for i in range(-lim_of_range, lim_of_range):
+    #         for j in range(-lim_of_range, lim_of_range):
+    #             for k in range(-lim_of_range, lim_of_range):
+    #                 layers = [i, j, k]
+    #                 if self.latticetype == 'fcc':
+    #                     atoms = FaceCenteredCubic(atomtype, surfaces, layers,
+    #                     latticeconstant=self.lc)
+    #                 if len(atoms) > max_size:
+    #                     continue
+    #                 atoms = Atoms(atoms)
+    #                 cluster_name = str(len(atoms)) + '_' + str(num) + '.xyz'
+    #                 if os.path.exists('data'+ folder + '/clusters_coordinates/' + cluster_name):
+    #                     continue
+    #                 else:
+    #                     write('/data/' + folder + '/clusters_coordinates/' + cluster_name, atoms)
+    #                 nl = neighborlist_factory(self.lc*2**0.5, atoms)
+    #                 for CN, u_ind, count in zip(*get_unique_pos(atoms, self.lc)):
+    #                     change_zero(atoms, atoms.get_positions()[u_ind])
+    #                     position_name = _'.join(map(str, CN)) + '.xyz'
+    #                     #Bad code below
+    #                     if os.path.exists('/data/' + folder + '/positions_coordinates/' + position_name):
+    #                         continue
+    #                     else:
+    #                         write('/data/' + folder + '/positions_coordinates/' + position_name +
+    #                         atoms[np.append([u_ind], nl.get_neighbors(u_ind)[0])])
+    #                         f = open('/data/' + folder + '/positions_count/' + cluster_name, 'a')
+    #                         f.write('_'.join(map(str, CN))+ ' ' + str(count) +'\n') #пишем, из каких неэквивал. позиций состоит кластер и сколько их в кластере
+    #                         f.close()
+    #
+    #                 num += 1
 
 cf = ClustersFactory('Cu', 10)
 cf.generate_clusters('Cu', 3)

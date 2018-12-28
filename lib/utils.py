@@ -34,3 +34,13 @@ def extract_pos_of_cluster(clustfile):
                 if (len(pos) == 2):
                     cluster_positions[pos[0]] = int(pos[1])
     return cluster_positions
+
+def find_center(xyz_arr):
+    return sum(xyz_arr)/len(xyz_arr)
+
+def get_gyration_radius(xyz_arr):
+    center = find_center(xyz_arr)
+    res = np.round(xyz_arr - center, 8)
+    sq_sum = sum(sum(res**2))
+    radius = np.round(np.sqrt(sq_sum/len(xyz_arr)), 2)
+    return radius
