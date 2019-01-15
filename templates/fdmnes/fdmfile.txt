@@ -1,0 +1,4 @@
+! General indata file for FDMNES
+
+ 1
+Pt_inp.txt

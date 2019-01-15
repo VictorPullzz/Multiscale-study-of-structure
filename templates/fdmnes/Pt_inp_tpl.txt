@@ -1,0 +1,50 @@
+! Fdmnes indata file
+! Calculation for the copper K-edge in copper cfc
+! Finite difference method calculation with convolution
+
+Filout
+	Pt_result
+
+Edge
+	L3
+
+! -- Energy range of calculation (eV)
+Range
+	-10 1.0 -5 0.1 0 0.5 10 1 50 2 100
+
+! -- Radius of the cluster where final state calculation is performed
+! -- For a good calculation, this radius must be increased up to 6 or 7 Angstroems
+Radius
+	7
+
+! -- Periodic material description (unit cell)
+Molecule
+	1. 1. 1. 90. 90. 90.
+	{{ coordinate }}
+
+Absorber
+	1
+
+Green
+	Relativism
+	No_fermi
+
+Efermi
+    -3.2
+
+Estart
+    -10
+
+Ecent
+    150.00
+
+Elarg
+    30.00
+
+Gamma_max
+    15.00
+
+Gamma_hole
+    6
+
+End
